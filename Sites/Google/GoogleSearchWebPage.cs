@@ -38,6 +38,7 @@ namespace Sites.Google
             try
             {
                 driverWait.Until(ExpectedConditions.ElementToBeClickable(searchGoogleBtn));
+                searchGoogleBtn.Click();
                 searchBtnClicked = true;
             }
             catch (Exception)
@@ -48,7 +49,6 @@ namespace Sites.Google
             if (!searchBtnClicked)
                 searchField.SendKeys(Keys.Enter);
 
-            searchGoogleBtn.Click();
             return new GoogleSearchResultsWebPage(driver);
         }
     }
