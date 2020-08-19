@@ -1,0 +1,3 @@
+﻿SearchWord;BrowserType
+automation;Chrome
+automation;Firefox

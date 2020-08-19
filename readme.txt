@@ -1,0 +1,9 @@
+- The solution is based on .NETFramework,Version=v4.7.2.
+- NUnit3 framework was used for automating tests.
+- PageObject patter was used to organize web pages.
+- Dependency resolution is done by NuGet.
+- Each test reads relevant input data file from "TestDataFiles" folder located under "Tests" project.
+- Tests are run in parallel.
+- The loger writes logs into the "logs" folder under executable folder ("../bin/Debug").
+- ExtentReports was used to generate a test execution report; the folder called "Reports" is located under a root solution folder ("TestProject").
+- Also under the root solution folder there is a file "kill_drivers_processes.bat". In case some test was not completed properly and the webdriver was not closed - its process (chromedriver.exe, geckodriver.exe etc) will stay running. This will prevent from an ability to clean the project. To kill all such processes just need to run this file ("kill_drivers_processes.bat").

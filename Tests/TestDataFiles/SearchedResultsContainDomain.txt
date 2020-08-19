@@ -1,0 +1,3 @@
+﻿SearchWord;SearchDomain;BrowserType
+automation;testautomationday.com;Chrome
+automation;testautomationday.com;Firefox
