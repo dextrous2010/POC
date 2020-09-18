@@ -1,3 +1,4 @@
-﻿SearchWord;SearchDomain;BrowserType
-automation;testautomationday.com;Chrome
-automation;testautomationday.com;Firefox
+﻿SearchWord;SearchDomain;SearchPagesCount;BrowserType
+automation;testautomationday.com;5;Chrome
+automation;testautomationday.com;5;Firefox
+auto;www.auto-company.com.ua;5;Chrome

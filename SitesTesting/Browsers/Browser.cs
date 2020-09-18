@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 
-namespace Browsers
+namespace SitesTesting.Browsers
 {
     public class Browser
     {
@@ -12,7 +12,7 @@ namespace Browsers
             Driver = remoteWebDriver;
         }
 
-        public Browser(RemoteWebDriver remoteWebDriver, bool maximizeWindow = false)
+        public Browser(RemoteWebDriver remoteWebDriver, bool maximizeWindow = true)
         {
             Driver = remoteWebDriver;
 

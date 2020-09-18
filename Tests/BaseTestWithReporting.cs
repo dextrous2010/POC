@@ -1,29 +1,39 @@
 ﻿using AventStack.ExtentReports;
-using Common.Reporting;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using OpenQA.Selenium;
+using SitesTesting.Browsers;
+using SitesTesting.Helpers;
+using SitesTesting.Reporting;
+using System.Collections.Generic;
 
 namespace Tests
 {
     public class BaseTestWithReporting
     {
-        ExtentReports report;
-        ExtentTest test;
+        private Dictionary<string, IWebDriver> driverPerTestId;
+        private ExtentReports report;
+        private ExtentTest test;
+
+        public BaseTestWithReporting()
+        {
+        }
 
         [OneTimeSetUp]
-        public void InitializeReoprt()
+        protected void Initialization()
         {
+            driverPerTestId = new Dictionary<string, IWebDriver>();
             report = ExtentManager.GetInstance();
         }
 
         [SetUp]
-        public void CreateTestInReporter()
+        protected void CreateTestInReporter()
         {
             test = report.CreateTest(TestContext.CurrentContext.Test.MethodName);
         }
 
         [TearDown]
-        public void LogTestStatusToReporter()
+        protected void LogTestStatusToReporter()
         {
             if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Passed)
                 test.Log(Status.Pass, $"Test {TestContext.CurrentContext.Test.MethodName} Passed");
@@ -35,12 +45,27 @@ namespace Tests
                 test.Log(Status.Skip, $"Test {TestContext.CurrentContext.Test.MethodName} Inconclusive");
             if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Warning)
                 test.Log(Status.Warning, $"Test {TestContext.CurrentContext.Test.MethodName} Warning");
+
+            DisposeTestDriver();
         }
 
         [OneTimeTearDown]
-        public void CompleteReport()
+        protected void Finalization()
         {
             report.Flush();
+        }
+
+        protected IWebDriver InitializeAndGetDriver(BrowserType browserType)
+        {
+            var driver = TestHelper.InitializeBrowserInstance(browserType).Driver;
+            driverPerTestId.Add(TestHelper.GetTestId(), driver);
+            return driver;
+        }
+
+        protected void DisposeTestDriver()
+        {
+            driverPerTestId[TestHelper.GetTestId()].Quit();
+            driverPerTestId.Remove(TestHelper.GetTestId());
         }
     }
 }

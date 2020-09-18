@@ -1,14 +1,15 @@
-﻿using Common.Logging;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
 using SeleniumExtras.WaitHelpers;
+using SitesTesting.Logging;
 using System;
 
-namespace Sites.Google
+namespace SitesTesting.Sites.Google
 {
     public class GoogleSearchWebPage : WebPage, ISearchWebPage
     {
         private const string URL = "https://www.google.com";
+        private const string ExpectedTitle = "Google";
 
         [FindsBy(How = How.Name, Using = "q")]
         private IWebElement searchField;
@@ -25,10 +26,15 @@ namespace Sites.Google
         {
             Log.WriteInfo($"Opening Google search page {URL}");
             driver.Navigate().GoToUrl(URL);
+
+            if (!Title.ToLower().Contains(ExpectedTitle.ToLower()))
+            {
+                Log.WriteError($"The Google search page was not opened!{Environment.NewLine}{Environment.StackTrace}");
+                throw new NotFoundException("The Google search page was not opened!");
+            }
+
             return this;
         }
-
-        public bool IsInitialized() => driver.Url.ToLower().Contains(URL);
 
         public ISearchResultsWebPage Search(string text)
         {

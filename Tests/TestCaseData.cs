@@ -1,5 +1,5 @@
-﻿using Browsers;
-using Common.Helpers;
+﻿using SitesTesting.Browsers;
+using SitesTesting.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +20,7 @@ namespace Tests
 
                 foreach (var item in data)
                 {
-                    yield return new object[] { item.Split(';')[0], Enum.Parse(typeof(BrowserType), item.Split(';')[1]) };
+                    yield return new object[] { item.Split(';')[0], int.Parse(item.Split(';')[1]), Enum.Parse(typeof(BrowserType), item.Split(';')[2]) };
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace Tests
 
                 foreach (var item in data)
                 {
-                    yield return new object[] { item.Split(';')[0], item.Split(';')[1], Enum.Parse(typeof(BrowserType), item.Split(';')[2]) };
+                    yield return new object[] { item.Split(';')[0], item.Split(';')[1], int.Parse(item.Split(';')[2]), Enum.Parse(typeof(BrowserType), item.Split(';')[3]) };
                 }
             }
         }

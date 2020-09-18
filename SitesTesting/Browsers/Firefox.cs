@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Firefox;
 
-namespace Browsers
+namespace SitesTesting.Browsers
 {
     public class Firefox : Browser
     {

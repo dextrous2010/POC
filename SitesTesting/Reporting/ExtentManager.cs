@@ -1,8 +1,8 @@
 ﻿using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
-using Common.Helpers;
+using SitesTesting.Helpers;
 
-namespace Common.Reporting
+namespace SitesTesting.Reporting
 {
     public class ExtentManager
     {

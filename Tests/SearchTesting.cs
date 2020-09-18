@@ -1,9 +1,7 @@
-﻿using Browsers;
-using Common.Helpers;
-using Common.Logging;
-using NUnit.Framework;
-using Sites.Google;
-using System;
+﻿using NUnit.Framework;
+using SitesTesting.Browsers;
+using SitesTesting.Logging;
+using SitesTesting.Sites.Google;
 
 namespace Tests
 {
@@ -12,82 +10,33 @@ namespace Tests
     public class Tests : BaseTestWithReporting
     {
         [TestCaseSource(typeof(TestCaseData), "TitleContainsSearchedWord")]
-        public void TitleContainsSearchedWord(string searchWord, BrowserType browserType)
+        public void TitleContainsSearchedWord(string searchWord, int searchResultLinkToOpen, BrowserType browserType)
         {
-            var linkNumber = 1;
-
             Log.WriteInfo("*** Starting the test ***");
 
-            Browser browser = TestHelper.InitializeBrowserInstance(browserType, true);
-            try
-            {
-                var searchPage = new GoogleSearchWebPage(browser.Driver).GoToPage();
-                Assert.True(searchPage.IsInitialized(), "The search page is not initizlized!");
+            var title = new GoogleSearchWebPage(InitializeAndGetDriver(browserType))
+                .GoToPage()
+                .Search(searchWord)
+                .OpenSearchResultLink(searchResultLinkToOpen)
+                .Title;
 
-                var title = searchPage.Search(searchWord)
-                    .OpenSearchResultLink(linkNumber)
-                    .Title;
+            Assert.That(title.ToUpper().Contains(searchWord.ToUpper()), $"Title does not contain the searched word {searchWord}!");
 
-                Assert.That(title.ToUpper().Contains(searchWord.ToUpper()), $"Title does not contain the searched word {searchWord}!");
-
-                Log.WriteInfo("*** Test PASSED! ***");
-            }
-            catch (AssertionException)
-            {
-                Log.WriteInfo($"*** Test FAILED ***");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Log.WriteError($"An error occured during the test execuiton.\n{ex}");
-                throw;
-            }
-            finally
-            {
-                browser.Driver.Quit();
-            }
+            Log.WriteInfo("*** Test PASSED! ***");
         }
 
         [TestCaseSource(typeof(TestCaseData), "SearchedResultsContainDomain")]
-        public void SearchedResultsContainDomain(string searchWord, string searchDomain, BrowserType browserType)
+        public void SearchedResultsContainDomain(string searchWord, string searchDomain, int searchPagesCount, BrowserType browserType)
         {
-            var searchPagesCount = 5;
-
             Log.WriteInfo("*** Starting the test ***");
 
-            Browser browser = TestHelper.InitializeBrowserInstance(browserType, true);
-            try
-            {
-                var searchPage = new GoogleSearchWebPage(browser.Driver).GoToPage();
-                Assert.True(searchPage.IsInitialized(), "The search page is not initizlized!");
+            var searchResultsPage = new GoogleSearchWebPage(InitializeAndGetDriver(browserType))
+                .GoToPage()
+                .Search(searchWord);
 
-                var searchResultsPage = searchPage.Search(searchWord);
-                Assert.True(searchResultsPage.IsInitialized(), "The search results page is not initizlized!");
+            Assert.That(searchResultsPage.SearchedResultsContainDomain(searchDomain, searchPagesCount), $"There is no the expected domain on the first {searchPagesCount} pages!");
 
-                for (int page = 1; page <= searchPagesCount; page++)
-                {
-                    if (page == 1 ? searchResultsPage.ContainsDomain(searchDomain) : searchResultsPage.GoToNextPage().ContainsDomain(searchDomain))
-                        Assert.Pass($"There is the expected domain on the first {searchPagesCount} pages.");
-                }
-
-                Assert.Fail($"There is no the expected domain on the first {searchPagesCount} pages!");
-
-                Log.WriteInfo("*** Test PASSED! ***");
-            }
-            catch (AssertionException)
-            {
-                Log.WriteInfo($"*** Test FAILED ***");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Log.WriteError($"An error occured during the test execuiton.\n{ex}");
-                throw;
-            }
-            finally
-            {
-                browser.Driver.Quit();
-            }
+            Log.WriteInfo("*** Test PASSED! ***");
         }
     }
 }

@@ -1,38 +1,40 @@
-﻿using Common.Logging;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
 using SeleniumExtras.WaitHelpers;
+using SitesTesting.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Sites.Google
+namespace SitesTesting.Sites.Google
 {
     public class GoogleSearchResultsWebPage : WebPage, ISearchResultsWebPage
     {
+        private const string URL = "https://www.google.com/search?";
         private int currentPageNumber = 0;
         private const int lastPageNumber = 10;
 
-        [FindsBy(How = How.Name, Using = "q")]
-        private IWebElement searchField;
-
-        [FindsBy(How = How.XPath, Using = "//*[@id='pnnext']/span[2]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='pnnext']/span[@class]")]
         private IWebElement nextPageBtn;
 
-        [FindsBy(How = How.XPath, Using = "//*[@id='pnprev']/span[2]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='pnprev']/span[@class]")]
         private IWebElement previousPageBtn;
 
-        [FindsBy(How = How.XPath, Using = "//div[@class='r']/a")]
+        [FindsBy(How = How.XPath, Using = "//div[@class='rc']/div/a")]
         private IList<IWebElement> searchResultLinks;
 
         public GoogleSearchResultsWebPage(IWebDriver driver) : base(driver)
         {
+            if (!driver.Url.ToLower().Contains(URL.ToLower()))
+            {
+                Log.WriteError($"The Google page with search results was not opened!\nUrl => {driver.Url}{Environment.NewLine}{Environment.StackTrace}");
+                throw new NotFoundException("The Google page with search results was not opened!");
+            }
+
             Log.WriteInfo("Opened a web page with the serch results.");
             currentPageNumber++;
         }
-
-        public bool IsInitialized() => driver.Url.ToLower().Contains("https://www.google.com/search?");
 
         public ISearchResultsWebPage GoToNextPage()
         {
@@ -78,6 +80,20 @@ namespace Sites.Google
 
             return searchResultLinks.Any(
                 i => Regex.Match(i.GetAttribute("href"), regPattern).Success);
+        }
+
+        public bool SearchedResultsContainDomain(string searchDomain, int searchPagesCount)
+        {
+            while (searchPagesCount-- > 0)
+            {
+                if (ContainsDomain(searchDomain))
+                    return true;
+
+                if (searchPagesCount != 0)
+                    GoToNextPage();
+            };
+
+            return false;
         }
     }
 }

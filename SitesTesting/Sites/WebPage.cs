@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using System;
 
-namespace Sites
+namespace SitesTesting.Sites
 {
     public class WebPage
     {

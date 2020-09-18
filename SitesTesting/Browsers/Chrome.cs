@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
 
-namespace Browsers
+namespace SitesTesting.Browsers
 {
     public class Chrome : Browser
     {

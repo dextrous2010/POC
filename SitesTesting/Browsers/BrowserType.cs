@@ -1,4 +1,4 @@
-﻿namespace Browsers
+﻿namespace SitesTesting.Browsers
 {
     public enum BrowserType
     {

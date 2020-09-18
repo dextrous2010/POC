@@ -1,10 +1,11 @@
-﻿using Browsers;
+﻿using NUnit.Framework;
+using SitesTesting.Browsers;
 
-namespace Common.Helpers
+namespace SitesTesting.Helpers
 {
     public class TestHelper
     {
-        public static Browser InitializeBrowserInstance(BrowserType browserType, bool maximizeWindow = false)
+        public static Browser InitializeBrowserInstance(BrowserType browserType, bool maximizeWindow = true)
         {
             switch (browserType)
             {
@@ -16,5 +17,7 @@ namespace Common.Helpers
                     return new Chrome(maximizeWindow);
             }
         }
+
+        public static string GetTestId() => TestContext.CurrentContext.Test.ID;
     }
 }
