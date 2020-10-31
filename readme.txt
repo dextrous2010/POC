@@ -7,3 +7,5 @@
 - The loger writes logs into the "logs" folder under executable folder ("../bin/Debug").
 - ExtentReports was used to generate a test execution report; the folder called "Reports" is located under a root solution folder ("TestProject").
 - Also under the root solution folder there is a file "kill_drivers_processes.bat". In case some test was not completed properly and the webdriver was not closed - its process (chromedriver.exe, geckodriver.exe etc) will stay running. This will prevent from an ability to clean the project. To kill all such processes just need to run this file ("kill_drivers_processes.bat").
+- Install the .NETFramework,Version=v4.8 to build the "SpecFlowTests" project successfully.
+- Install the Visual Studio SpecFlow extension to make it working from the following link (topic name is "Installing the Visual Studio Extension"): https://docs.specflow.org/projects/specflow/en/latest/Getting-Started/Getting-Started-With-A-New-Project.html?utm_source=website&utm_medium=newproject&utm_campaign=getting_started
