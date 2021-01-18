@@ -16,6 +16,7 @@ namespace SitesTesting.Sites
             this.driver = driver;
             this.driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             driverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            driver.Manage().Timeouts().PageLoad = TimeSpan.FromMinutes(3);
             PageFactory.InitElements(driver, this);
         }
 
